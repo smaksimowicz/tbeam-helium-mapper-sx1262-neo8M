@@ -145,15 +145,10 @@ unsigned long int ack_req = 0;
 unsigned long int ack_rx = 0;
 
 void coreTask( void * pvParameters ){
- 
-   
-    esp_sleep_enable_ext0_wakeup(GPIO_NUM_33,1);
+
     while(true){
-         Serial.print("Task running on core ");
-         Serial.println(xPortGetCoreID());
-         Serial.flush();
-          // Wake on either button press
-         esp_deep_sleep_start();
+       vTaskDelay(portMAX_DELAY);
+          // Wake on either button press 
     }
  
 }
@@ -777,7 +772,7 @@ void setup() {
 
   // Make sure WiFi and BT are off
   // WiFi.disconnect(true);
-  adc_power_release ();
+  adc_power_off();
   WiFi.disconnect(true);  // Disconnect from the network
   WiFi.mode(WIFI_MODE_NULL);
   btStop();
@@ -851,7 +846,7 @@ void setup() {
   Serial.printf("Starting to create task on core  0\n");
   //For beter power consumption 
 
-  xTaskCreatePinnedToCore( 
+   xTaskCreatePinnedToCore( 
                     coreTask,   /* Function to implement the task */
                     "coreTask", /* Name of the task */
                     10000,      /* Stack size in words */
