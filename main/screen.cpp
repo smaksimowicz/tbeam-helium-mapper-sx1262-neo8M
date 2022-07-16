@@ -213,6 +213,7 @@ void screen_header(unsigned int tx_interval_s, float min_dist_moved, char *cache
   uint32_t sats = tGPS.satellites.value();
   boolean no_gps = (sats < 3);
   uint16_t devid_hint = ((DEVEUI[7] << 4) | (DEVEUI[6] & 0xF0) >> 4);
+  time_t t_loc;
 
   display->clear();
 
@@ -251,18 +252,26 @@ void screen_header(unsigned int tx_interval_s, float min_dist_moved, char *cache
       timeinfo.tm_min = tGPS.time.minute();
       timeinfo.tm_sec = tGPS.time.second();
   
-      time_t t_loc = CE.toLocal( mktime(&timeinfo));
+      t_loc = CE.toLocal( mktime(&timeinfo));
       snprintf(buffer, sizeof(buffer), "#%03X %02d:%02d:%02d", devid_hint,  hour(t_loc), tGPS.time.minute(),
                tGPS.time.second());
 
       display->setTextAlignment(TEXT_ALIGN_LEFT);
       display->drawString(0, 2, buffer);
+
+
+      snprintf(buffer, sizeof(buffer), "%02u-%02u-%04u",day(t_loc),month(t_loc),year(t_loc) );
+      display->setTextAlignment(TEXT_ALIGN_RIGHT);
+      display->drawString(display->getWidth(), 12, buffer);
+
     }
   }
 
   // HDOP & Satellite count
   if (!no_gps) {
-    snprintf(buffer, sizeof(buffer), "%2.1f   %d", tGPS.hdop.hdop(), sats);
+    double hdop = tGPS.hdop.hdop();
+
+    snprintf(buffer, sizeof(buffer), "%2.1f   %d", hdop < 1000 ? hdop : 999, sats);
     display->setTextAlignment(TEXT_ALIGN_RIGHT);
     display->drawString(display->getWidth() - SATELLITE_IMAGE_WIDTH - 4, 2, buffer);
     display->drawXbm(display->getWidth() - SATELLITE_IMAGE_WIDTH, 0, SATELLITE_IMAGE_WIDTH, SATELLITE_IMAGE_HEIGHT,
@@ -272,8 +281,13 @@ void screen_header(unsigned int tx_interval_s, float min_dist_moved, char *cache
   // Second status row:
   snprintf(buffer, sizeof(buffer), "%us %.0fm %c%c%c", tx_interval_s, min_dist_moved, in_deadzone ? 'D' : ' ',
            stay_on ? 'S' : ' ', never_rest ? 'N' : ' ');
+
+          
   display->setTextAlignment(TEXT_ALIGN_LEFT);
   display->drawString(0, 12, buffer);
+  
+ 
+
 
   display->setTextAlignment(TEXT_ALIGN_RIGHT);
   display->drawString(display->getWidth(), 12, cached_sf_name);
