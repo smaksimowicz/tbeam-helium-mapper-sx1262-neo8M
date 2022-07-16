@@ -36,6 +36,7 @@
 #include <Arduino.h>
 #include <Preferences.h>
 #include <Wire.h>
+#include "driver/adc.h"
 #include <axp20x.h>
 #include "..\lib\basicmac\src\lmic\lmic.h"
 #include <Timezone.h>
@@ -142,6 +143,20 @@ char sf_name[40];
 
 unsigned long int ack_req = 0;
 unsigned long int ack_rx = 0;
+
+void coreTask( void * pvParameters ){
+ 
+   
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_33,1);
+    while(true){
+         Serial.print("Task running on core ");
+         Serial.println(xPortGetCoreID());
+         Serial.flush();
+          // Wake on either button press
+         esp_deep_sleep_start();
+    }
+ 
+}
 
 // Store Lat & Long in six bytes of payload
 void pack_lat_lon(double lat, double lon) {
@@ -762,10 +777,13 @@ void setup() {
 
   // Make sure WiFi and BT are off
   // WiFi.disconnect(true);
+  adc_power_release ();
+  WiFi.disconnect(true);  // Disconnect from the network
   WiFi.mode(WIFI_MODE_NULL);
   btStop();
 
   Wire.begin(I2C_SDA, I2C_SCL);
+ 
   scanI2Cdevice();
 
   axp192Init();
@@ -783,6 +801,7 @@ void setup() {
 
   // Hello
   DEBUG_MSG("\n" APP_NAME " " APP_VERSION "\n");
+  DEBUG_MSG("\ntest\n");
 
   mapper_restore_prefs();  // Fetch saved settings
 
@@ -828,6 +847,20 @@ void setup() {
     screen_print("** Missing AXP192! **\n");
 
   Serial.printf("Deadzone: %f.0m @ %f, %f\n", deadzone_radius_m, deadzone_lat, deadzone_lon);
+
+  Serial.printf("Starting to create task on core  0\n");
+  //For beter power consumption 
+
+  xTaskCreatePinnedToCore( 
+                    coreTask,   /* Function to implement the task */
+                    "coreTask", /* Name of the task */
+                    10000,      /* Stack size in words */
+                    NULL,       /* Task input parameter */
+                    0,          /* Priority of the task */
+                    NULL,       /* Task handle. */
+                    1);         /* Core where the task should run */
+
+  Serial.flush();
 }
 
 // Should be around 0.5mA ESP32 consumption, plus OLED controller and PMIC overhead.
