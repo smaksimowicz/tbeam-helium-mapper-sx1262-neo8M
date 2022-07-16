@@ -10,6 +10,7 @@
 
 #if !defined(CFG_simul)
 #include "board.h"
+#include "../../../main/configuration.h"
 #endif // !defined(CFG_simul)
 
 // Dependencies required for the LoRa MAC in C to run.

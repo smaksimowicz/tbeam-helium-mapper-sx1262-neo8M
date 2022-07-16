@@ -7,6 +7,7 @@
 //! \file
 #include "lmic.h"
 
+
 #if !defined(MINRX_SYMS)
 #define MINRX_SYMS 7 // (see bugfix_rxtime() in radio-rx127x.c)
 #endif // !defined(MINRX_SYMS)
@@ -774,7 +775,7 @@ static void setDrJoin (u1_t reason, dr_t dr) {
 static void setDrTxpow (u1_t reason, dr_t dr, s1_t powadj) {
     (void)reason; // unused
     if( powadj != KEEP_TXPOWADJ )
-        LMIC.txPowAdj = powadj;
+        LMIC.txPowAdj = powadj + DBM_TX_CORRECTION;
     if( LMIC.datarate != dr ) {
         LMIC.datarate = dr;
         LMIC.opmode |= OP_NEXTCHNL;
@@ -3281,7 +3282,7 @@ void LMIC_reset (void) {
 }
 
 void LMIC_init (void) {
-    LMIC.opmode = OP_SHUTDOWN;
+    LMIC.opmode = OP_SHUTDOWN;  
 }
 
 void LMIC_clrTxData (void) {
