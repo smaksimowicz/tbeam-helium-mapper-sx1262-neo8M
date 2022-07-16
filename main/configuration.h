@@ -225,5 +225,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SUMMER_TIME_RULE {"CEST", Last, Sun, Mar, 2, 60} //Central European Summer Time
 #define STANDARD_TIME_RULE  {"CET ", Last, Sun, Oct, 3, 0}   //Central European Standard Time
 
-// MAX EIRP Correction .. my board was modified and I use 2 connectors in parralel thus ~3.8dB lose
+// MAX EIRP Correction .. my board was modified and I use 2 connectors in parallel thus ~3.8dB lose
 #define DBM_TX_CORRECTION  4

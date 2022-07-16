@@ -7,6 +7,7 @@
 //! \file
 #include "lmic.h"
 
+
 #if !defined(MINRX_SYMS)
 #define MINRX_SYMS 7 // (see bugfix_rxtime() in radio-rx127x.c)
 #endif // !defined(MINRX_SYMS)
@@ -774,7 +775,7 @@ static void setDrJoin (u1_t reason, dr_t dr) {
 static void setDrTxpow (u1_t reason, dr_t dr, s1_t powadj) {
     (void)reason; // unused
     if( powadj != KEEP_TXPOWADJ )
-        LMIC.txPowAdj = powadj;
+        LMIC.txPowAdj = powadj+DBM_TX_CORRECTION;
     if( LMIC.datarate != dr ) {
         LMIC.datarate = dr;
         LMIC.opmode |= OP_NEXTCHNL;
@@ -970,7 +971,7 @@ static void updateTx_dyn (ostime_t txbeg) {
     u1_t b = freq & BAND_MASK;
     // set frequency/power
     LMIC.freq  = freq & ~BAND_MASK;
-    LMIC.txpow = os_min(LMIC.txPowAdj + REGION.maxEirp, REGION.bands[b].txpow);
+    LMIC.txpow = os_min(LMIC.txPowAdj + REGION.maxEirp, REGION.bands[b].txpow)  ;
     // Update band duty cycle stats
     osxtime_t xnow = os_getXTime();
     //XXX:TBD: osxtime_t xtxbeg = os_time2XTime(txbeg, os_getXTime());
@@ -1132,7 +1133,7 @@ static void initJoinLoop (void) {
         LMIC.txChnl = 0; // XXX - join should use nextTx!
         setDrJoin(DRCHG_SET, fastest125());
     }
-    LMIC.txPowAdj = DBM_TX_CORRECTION ;
+    LMIC.txPowAdj =  DBM_TX_CORRECTION;
     LMIC.nbTrans = 0;
     ASSERT((LMIC.opmode & OP_NEXTCHNL) == 0);
     LMIC.txend = os_getTime() + rndDelay(8); // random delay before first join req
