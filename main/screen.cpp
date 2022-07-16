@@ -36,8 +36,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SCREEN_HEADER_HEIGHT 23
 
 
-TimeChangeRule CEST = {"CEST", Last, Sun, Mar, 2, 60}; //Central European Summer Time
-TimeChangeRule CET = {"CET ", Last, Sun, Oct, 3, 0};   //Central European Standard Time
+TimeChangeRule CEST = SUMMER_TIME_RULE;
+TimeChangeRule CET = STANDARD_TIME_RULE ;
 Timezone CE(CEST, CET);
 
 

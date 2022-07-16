@@ -220,3 +220,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define GPS_POWER_CTRL_CH 3
 #define LORA_POWER_CTRL_CH 2
 #define PMU_IRQ 35
+
+// GPS time zone rules - this example is for Poland
+#define SUMMER_TIME_RULE {"CEST", Last, Sun, Mar, 2, 60} //Central European Summer Time
+#define STANDARD_TIME_RULE  {"CET ", Last, Sun, Oct, 3, 0}   //Central European Standard Time

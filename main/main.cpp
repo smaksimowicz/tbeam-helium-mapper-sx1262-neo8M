@@ -54,7 +54,7 @@
 #define STATUS_USB_ON 2
 #define STATUS_USB_OFF 3
 
-// GPS time zone rules - this example is for Poland
+
 
 
 // Defined in ttn.ino
