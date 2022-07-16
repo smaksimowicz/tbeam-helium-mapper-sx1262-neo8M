@@ -35,6 +35,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define SCREEN_HEADER_HEIGHT 23
 
+
+TimeChangeRule CEST = {"CEST", Last, Sun, Mar, 2, 60}; //Central European Summer Time
+TimeChangeRule CET = {"CET ", Last, Sun, Oct, 3, 0};   //Central European Standard Time
+Timezone CE(CEST, CET);
+
+
 OLEDDisplay *display;
 uint8_t _screen_line = SCREEN_HEADER_HEIGHT - 1;
 
@@ -236,12 +242,17 @@ void screen_header(unsigned int tx_interval_s, float min_dist_moved, char *cache
 
     } else {
         
-      // GMT+2 Poland Time correction
-      int localHour = (tGPS.time.hour() + 2 ) % 24;
-      if( localHour < 0 )
-      localHour += 24;
-      
-      snprintf(buffer, sizeof(buffer), "#%03X %02d:%02d:%02d", devid_hint, localHour, tGPS.time.minute(),
+      //Time Zone correction
+      struct tm timeinfo;
+      timeinfo.tm_year = tGPS.date.year() - 1900;
+      timeinfo.tm_mon = tGPS.date.month() - 1;
+      timeinfo.tm_mday = tGPS.date.day();
+      timeinfo.tm_hour = tGPS.time.hour();
+      timeinfo.tm_min = tGPS.time.minute();
+      timeinfo.tm_sec = tGPS.time.second();
+  
+      time_t t_loc = CE.toLocal( mktime(&timeinfo));
+      snprintf(buffer, sizeof(buffer), "#%03X %02d:%02d:%02d", devid_hint,  hour(t_loc), tGPS.time.minute(),
                tGPS.time.second());
 
       display->setTextAlignment(TEXT_ALIGN_LEFT);

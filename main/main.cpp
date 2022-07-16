@@ -38,7 +38,8 @@
 #include <Wire.h>
 #include <axp20x.h>
 #include "..\lib\basicmac\src\lmic\lmic.h"
-
+#include <Timezone.h>
+#include <TimeLib.h>
 #include "configuration.h"
 #include "gps.h"
 #include "screen.h"
@@ -52,6 +53,9 @@
 #define STATUS_BOOT 1
 #define STATUS_USB_ON 2
 #define STATUS_USB_OFF 3
+
+// GPS time zone rules - this example is for Poland
+
 
 // Defined in ttn.ino
 void ttn_register(void (*callback)(uint8_t message));
