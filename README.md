@@ -23,15 +23,12 @@ No, you do not.  I put this here because it seems to be the #1 FAQ.  You do not 
 No, you do not.  It's the #2 FAQ.  The Mapper data and coverage maps are not involved in any POC challenges or used for gaming denylists.
 
 ## Supported Hardware
-I tested this software on (many) LilyGo [TTGO T-Beam v1.1](http://www.lilygo.cn/prod_view.aspx?TypeId=50060&Id=1317&FId=t3:50060:3) devices, all on **US915**.  Others have enjoyed success on **EU688** and other worldwide bands, with the matching device.  These are commonly avaialable as "Meshtastic" devices from AliExpress, Amazon, Banggood, eBay, etc, usually as a kit with an unsoldered OLED screen and SMA antenna for around USD $30.00.
+Tested on LILYGO® TTGO T-Beam V1.1 ESP32 NEO-M8N GNSS IPEX LoRa SX1262 868Mhz 
 
 If you have an older v0.7 board or different region, adjust the configuration to match.  If you have a unique variant and find something not working, open an Issue and provide what information you can.
 
 ### Semtech LoRa Radio
-This build uses the [MCCI Catena LMIC Library](https://github.com/mcci-catena/arduino-lmic) for LoRaWAN on the Semtech SX1276 or SX1272 radio modules.
-
-Note that the T-Beam device with a [U.FL / I-PEX](https://www.hirose.com/product/series/U.FL#) LoRa antenna connector and uBlox NEO-8M GPS module comes with a Semtech SX1262 radio, which is NOT supported by the LMIC library.  
-**Do Not Buy** [this incorrect device](https://www.amazon.com/T-Beam-NEO-M8N-Wireless-Bluetooth-Display/dp/B07X2SNNGQ) for use on Helium!  It will not work.
+Tested on LILYGO® TTGO T-Beam V1.1 ESP32 NEO-M8N GNSS IPEX LoRa SX1262 868Mhz 
 
 ### OLED Display
 Most T-Beam units arrive with no OLED Display attached.  You **can** operate the mapper without an OLED display, if you would like.  Of course, the status and menu will be invisible, but there may be applications where a display is not required.
