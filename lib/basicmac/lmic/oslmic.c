@@ -22,7 +22,7 @@ void rng_init (void);
 
 void os_init (void* bootarg) {
     memset(&OS, 0x00, sizeof(OS));
-    lmic_hal_init(bootarg);
+    hal_init(bootarg);
 #ifndef CFG_noradio
     radio_init(false);
 #endif
@@ -239,6 +239,8 @@ void os_runloop (void) {
 }
 
 static u1_t evcatEn = 0xFF;
+
+
 
 void os_logEv (uint8_t evcat, uint8_t evid, uint32_t evparam) {
     if( evcat >= EVCAT_MAX && evcat < sizeof(evcatEn)*8 && (evcatEn & (1<<evcat)) == 0 )

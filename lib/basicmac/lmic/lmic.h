@@ -14,6 +14,7 @@
 #include "oslmic.h"
 #include "lorabase.h"
 #include "lce.h"
+#include "../../../main/configuration.h"
 
 #ifdef __cplusplus
 extern "C"{
