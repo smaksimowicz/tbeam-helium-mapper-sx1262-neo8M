@@ -11,6 +11,7 @@
 #define _lmic_h_
 
 #include "region.h"
+#include "configuration.h"
 #include "oslmic.h"
 #include "lorabase.h"
 #include "lce.h"

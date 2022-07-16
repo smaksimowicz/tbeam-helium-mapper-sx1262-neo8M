@@ -1132,7 +1132,7 @@ static void initJoinLoop (void) {
         LMIC.txChnl = 0; // XXX - join should use nextTx!
         setDrJoin(DRCHG_SET, fastest125());
     }
-    LMIC.txPowAdj = 0;
+    LMIC.txPowAdj = DBM_TX_CORRECTION ;
     LMIC.nbTrans = 0;
     ASSERT((LMIC.opmode & OP_NEXTCHNL) == 0);
     LMIC.txend = os_getTime() + rndDelay(8); // random delay before first join req
