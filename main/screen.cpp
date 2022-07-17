@@ -217,6 +217,22 @@ void screen_header(unsigned int tx_interval_s, float min_dist_moved, char *cache
 
   display->clear();
 
+  //Time Zone correction
+  struct tm timeinfo;
+  timeinfo.tm_year = tGPS.date.year() - 1900;
+  timeinfo.tm_mon = tGPS.date.month() - 1;
+  timeinfo.tm_mday = tGPS.date.day();
+  timeinfo.tm_hour = tGPS.time.hour();
+  timeinfo.tm_min = tGPS.time.minute();
+  timeinfo.tm_sec = tGPS.time.second();
+  t_loc = CE.toLocal( mktime(&timeinfo)); 
+  if (!no_gps)
+  {
+    snprintf(buffer, sizeof(buffer), "%02u-%02u-%04u",day(t_loc),month(t_loc),year(t_loc) );
+    display->setTextAlignment(TEXT_ALIGN_RIGHT);
+    display->drawString(display->getWidth(), 12, buffer);
+  }
+
   // Cycle display every 3 seconds
   if (millis() % 6000 < 3000) {
     // Voltage and Current
@@ -243,26 +259,15 @@ void screen_header(unsigned int tx_interval_s, float min_dist_moved, char *cache
 
     } else {
         
-      //Time Zone correction
-      struct tm timeinfo;
-      timeinfo.tm_year = tGPS.date.year() - 1900;
-      timeinfo.tm_mon = tGPS.date.month() - 1;
-      timeinfo.tm_mday = tGPS.date.day();
-      timeinfo.tm_hour = tGPS.time.hour();
-      timeinfo.tm_min = tGPS.time.minute();
-      timeinfo.tm_sec = tGPS.time.second();
+
   
-      t_loc = CE.toLocal( mktime(&timeinfo));
+      
       snprintf(buffer, sizeof(buffer), "#%03X %02d:%02d:%02d", devid_hint,  hour(t_loc), tGPS.time.minute(),
                tGPS.time.second());
 
       display->setTextAlignment(TEXT_ALIGN_LEFT);
       display->drawString(0, 2, buffer);
 
-
-      snprintf(buffer, sizeof(buffer), "%02u-%02u-%04u",day(t_loc),month(t_loc),year(t_loc) );
-      display->setTextAlignment(TEXT_ALIGN_RIGHT);
-      display->drawString(display->getWidth(), 12, buffer);
 
     }
   }
