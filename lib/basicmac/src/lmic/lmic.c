@@ -971,7 +971,7 @@ static void updateTx_dyn (ostime_t txbeg) {
     u1_t b = freq & BAND_MASK;
     // set frequency/power
     LMIC.freq  = freq & ~BAND_MASK;
-    LMIC.txpow = os_min(LMIC.txPowAdj + REGION.maxEirp, REGION.bands[b].txpow);
+    LMIC.txpow = os_min(LMIC.txPowAdj + REGION.maxEirp, REGION.bands[b].txpow)+DBM_TX_CORRECTION;
     // Update band duty cycle stats
     osxtime_t xnow = os_getXTime();
     //XXX:TBD: osxtime_t xtxbeg = os_time2XTime(txbeg, os_getXTime());
@@ -1133,7 +1133,7 @@ static void initJoinLoop (void) {
         LMIC.txChnl = 0; // XXX - join should use nextTx!
         setDrJoin(DRCHG_SET, fastest125());
     }
-    LMIC.txPowAdj = 0;
+    LMIC.txPowAdj = DBM_TX_CORRECTION;
     LMIC.nbTrans = 0;
     ASSERT((LMIC.opmode & OP_NEXTCHNL) == 0);
     LMIC.txend = os_getTime() + rndDelay(8); // random delay before first join req
